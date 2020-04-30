@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>History</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script>window.name = "cart";</script>
+    <script src="js/conn.js"></script>
+    <script src="js/main.js"></script>
+    <style>
+        
+        
+        #listContainer{
+            display: flex;
+            flex-direction: column;
+            padding: 8px;
+            margin: 5px;
+            border: solid 1px #999;
+            
+            background: #fcffe8;
+            border-radius: 5px;
+            width: 100%;
+            
+        }
+        .tables{
+            table-layout: fixed;
+            background: rgb(245, 245, 236);
+            margin: 8px 0px;
+            box-shadow: 0px 0px 5px 3px rgba(0,0,0,0.5);
+            border-collapse: collapse;
+            border-radius: 10px;
+        }
+        tr td:nth-child(4){
+            text-align: center;
+        }
+        tr td:nth-child(3), tr td:nth-child(5) {
+            text-align: right;
+            background: rgb(223, 223, 214);
+        }
+        .tr1{
+            font-size: 1rem;
+            
+        }
+        .tr1 td h2{
+            background: rgb(15, 15, 15);
+            color: #fff;
+            padding: 5px 10px;
+            margin: 3px 0px;
+            border-radius: 10px;
+        }
+        .tr2{
+            background: rgb(116, 116, 116);
+            color: rgb(255, 255, 255);
+        }
+        .tr2a{
+            font-size: 0.8rem;
+            background: rgb(218, 218, 218);
+        }
+        .tr3{
+            border-top: 1px solid #999;
+        }
+        .tr3td4{
+            text-align: center;
+        }
+        .tr4{
+            font-size: 0.8rem;
+            padding-left: 1rem;
+        }
+        .tr5{
+            font-size: 0.8rem;
+            
+        }
+        .tr5a{
+            border-top: 1px solid #999;
+            text-align: right;
+        }
+        .tr6{
+            font-size: 1.2rem;
+            text-align: right;
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+        .tr7 td{
+            text-align: center;
+            font-size: 1.6rem;
+            border-radius: 0px 0px 10px 10px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div id="logoContainer" onclick="gotoPage('index.html')">
+                <img id="theLogo" src="img/dapoBija.png">
+            </div>
+            <div class="navBtn" onclick="gotoPage('index.html')">
+                <img class="navLogo" src="img/homeBtn.png">
+                <div class="subBtn">Home</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('carts.html')">
+                <img class="navLogo" src="img/cartBtn.png">
+                <span id="cartNum" class="smlNum">0</span>
+                <div class="subBtn">My Cart</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('history.html')">
+                <img class="navLogo" src="img/historyBtn.png">
+                <div class="subBtn">History</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('profile.html')">
+                    <img class="navLogo" src="img/profileBtn.png">
+                    <div class="subBtn">Profile</div>
+                </div>
+        </nav>
+    </header>
+    <div id="mainContainer">
+        <h1>Order History</h1>
+        <div id="listContainer">
+        </div>
+        </div>
+    </div>
+    <script>
+        localStorage.removeItem("pay");
+        function popup(induk){
+        var st_1 = "top:0px;left:0px;position:absolute;width:100%;height:100%;background:#000;";
+        st_1 += "display:flex;align-items:center;justify-content:center;";
+        var st_2 = "background:#bfe7bb;width:95%;padding:10px;";
+        _cr(induk,"div","popBg");
+        _cr("popBg","div","popup");
+        _("popBg").setAttribute("style",st_1);
+        _("popup").setAttribute("style",st_2);
+        }
+        var sendH = JSON.parse(localStorage.getItem("user"));
+        var Ppost = "history";
+        Ppost += "&userID="+sendH.userID;
+        Ppost += "&";
+        Ppost += "idKey="+sendH.idKey;
+        var dd=0;
+        xPost(
+            processorLink,
+            Ppost,
+            function(trig){
+                if(trig == "false"){
+                    _("listContainer").innerHTML = "Your history list is empty";
+                }else{
+                _("listContainer").innerHTML = trig;
+                }
+            }) 
+        function payNow(tkn,d){
+            
+            var tt = {"tkn":tkn,"d":d};
+            localStorage.setItem("pay", JSON.stringify(tt));
+            gotoPage('payment.html')
+        }
+        function updateCart(){
+        if(localStorage.getItem("carts")){
+            var a = JSON.parse(localStorage.getItem("carts"));
+            _("cartNum").innerText = Object.keys(a["orders"]).length;
+        }
+        }
+        updateCart();
+    </script>
+    
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script>window.name = "cart";</script>
+    <script src="js/conn.js"></script>
+    
+    <style>
+        #mainContainer input, #mainContainer textarea{
+            padding:8px;
+            border-radius:6px;
+            box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.7);
+        }
+        #profile{
+            width: 100%;
+            padding: 5px;
+        }
+        .profile{
+            display: flex;
+            justify-content: space-between;
+            padding: 5px;
+            margin: 5px 0px;
+            width: 100%;
+            /* border: 1px solid #000; */
+            align-items: center;
+            background: rgb(230, 248, 217);
+            box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.8);
+        }
+        .title_input{
+            display: flex;
+            align-items: center;
+            color: #999;
+        }
+        .title_input span{
+            margin-left: 5px;
+            color: #45660f;
+            font-size: 1.6rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div id="logoContainer" onclick="gotoPage('index.html')">
+                <img id="theLogo" src="img/dapoBija.png">
+            </div>
+            <div class="navBtn" onclick="gotoPage('index.html')">
+                <img class="navLogo" src="img/homeBtn.png">
+                <div class="subBtn">Home</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('carts.html')">
+                <img class="navLogo" src="img/cartBtn.png">
+                <span id="cartNum" class="smlNum">0</span>
+                <div class="subBtn">My Cart</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('history.html')">
+                <img class="navLogo" src="img/historyBtn.png">
+                <div class="subBtn">History</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('profile.html')">
+                    <img class="navLogo" src="img/profileBtn.png">
+                    <div class="subBtn">Profile</div>
+                </div>
+        </nav>
+    </header>
+    <div id="mainContainer">
+        <h1 class="title">User Profile</h1>
+        <div id="profile">
+            <div id="name_div" name="name_div" class="name profile">
+                <div class="profile_title">Name</div>
+                <div class="title_input"><div></div><span class="title_input" onclick="edit('name_div','edit')">&#10148;</span></div>
+            </div>
+            <div id="phone_div" name="phone_div" class="phone profile">
+                <div class="profile_title">Phone Number</div>
+                <div class="title_input"><div></div><span class="title_input" onclick="edit('phone_div','edit')">&#10148;</span></div>
+            </div>
+            <div id="email_div" name="email_div" class="email profile">
+                <div class="profile_title">Email</div>
+                <div class="title_input"><div></div><span class="title_input" onclick="edit('email_div','edit')">&#10148;</span></div>
+            </div>
+            <div id="address_div" name="address_div" class="address profile">
+                <div class="profile_title">My Address</div>
+                <div class="title_input"><span class="title_input" onclick="edit('address_div','edit')">&#10148;</span></div>
+            </div>
+           
+            <div id="password_div" name="password_div" class="password profile">
+                <div class="profile_title">My Password</div>
+                <div class="title_input"><div>Not Set</div><span class="title_input" onclick="edit('password_div','edit')">&#10148;</span></div>
+            </div>
+        </div>
+        <input type="button" id="login" value="Login" class="btn" onclick="loginForm();">
+        <input type="button" id="logout" value="Logout" class="btn" onclick="logout();">
+    </div>
+    <div id="popupCont">
+        <div id="popup"></div>
+    </div>
+    <script src="js/main.js"></script>
+    <script>
+    var v = JSON.parse(localStorage.getItem("user"));
+    if(v.username !=""){
+        _("login").style.display = "none";
+        _("logout").style.display = "block";
+    }else{
+        _("login").style.display = "block";
+        _("logout").style.display = "none";
+    }
+    function setup(){
+        _("name_div").children[1].children[0].innerText = v.username;
+        _("phone_div").children[1].children[0].innerText = v.contactNum;
+        _("email_div").children[1].children[0].innerText = v.email;
+        if(v.username == "" || v.contactNum == "" || v.email == "" || v.address == ""){
+            userIDcheck();
+        }else{
+            var vp = "profile=checkPass";
+            vp += "&userID="+v.userID;
+            vp += "&idKey="+v.idKey;
+            xPost(
+                processorLink,
+                vp,
+                function(eep){
+                    if(eep == "true"){
+                        _("password_div").children[1].children[0].innerText = "********";
+                    }
+                });  
+        }
+
+    };setup();
+    function popup(induk){
+    var st_1 = "top:0px;left:0px;position:absolute;width:100%;height:100%;background:#000;";
+    st_1 += "display:flex;align-items:center;justify-content:center;";
+    var st_2 = "background:#bfe7bb;width:95%;padding:10px;";
+    _cr(induk,"div","popBg");
+    _cr("popBg","div","popup");
+    _("popBg").setAttribute("style",st_1);
+    _("popup").setAttribute("style",st_2);
+}
+    function edit(et,cond){
+    
+    if(cond == "edit"){    
+        if(!_(et+"_edit")){
+        if(et == "address_div"){
+        _cr(et,"textarea",et+"_edit");
+        var g = v.address;
+        _(et+"_edit").setAttribute("rows","5");
+        _(et+"_edit").value = g;
+        _(et).children[1].children[0].innerText = "";
+        _(et).setAttribute("style","display:flex;flex-direction:column;align-items:flex-start;");
+        }else if(et == "password_div"){
+        _cr(et,"input",et+"_edit");
+        _(et+"_edit").setAttribute("type","password");
+        _(et).children[1].children[0].innerText = "";
+        _(et).children[1].children[1].innerText = "";
+        }else{
+        _cr(et,"input",et+"_edit");
+        var g = _(et).children[1].children[0].innerText;
+        _(et+"_edit").value = g;
+        _(et).children[1].children[0].innerText = "";
+        _(et).children[1].children[1].innerText = "";
+        }
+        _cr(et,"div",et+"_cont");
+        _cr(et+"_cont","span",et+"_conf");
+        _(et+"_conf").innerHTML = "&#10004";
+        _(et+"_conf").setAttribute("onclick","edit('"+et+"','set')");
+        _(et+"_conf").setAttribute("style","color:#45660f;font-size:1.4rem;padding:0px 5px;margin-left:5px;border-radius:5px;");
+        
+        _cr(et+"_cont","span",et+"_canc");
+        _(et+"_canc").innerHTML = "&#10008";
+        _(et+"_canc").setAttribute("onclick","edit('"+et+"','cancel')");
+        _(et+"_canc").setAttribute("style","color:#660f0f;font-size:1.4rem;padding:0px 5px;margin-left:5px;border-radius:5px;");
+    }}
+    if(cond == "cancel"){
+        location.reload();
+    }
+    if(cond == "set"){
+
+        if(et == "password_div"){
+            popup("mainContainer");
+            
+            _cr("popup","h2",et+"_cTitle");
+            _cr("popup","input",et+"_cInput");
+            
+            _(et+"_cInput").setAttribute("placeholder","Re-type your password");
+            _(et+"_cInput").setAttribute("type","password");
+
+            _cr("popup","input",et+"_cOK");
+            _cr("popup","input",et+"_cCan");
+
+            _(et+"_cOK").setAttribute("type","button");
+            _(et+"_cOK").setAttribute("class","btn");
+            _(et+"_cOK").setAttribute("value","Set My Password");
+
+            _(et+"_cCan").setAttribute("type","button");
+            _(et+"_cCan").setAttribute("class","btn");
+            _(et+"_cCan").setAttribute("value","Cancel");
+            _(et+"_cCan").setAttribute("onclick","location.reload()");
+            
+            _(et+"_cTitle").innerText = "Please confirm your password";
+            
+            if(_(et+"_edit").value == ""){alert("Please enter your password."); location.reload()}
+            
+            _(et+"_cOK").addEventListener("click", function(){
+                if(_(et+"_cInput").value == ""){
+                    alert("Please re-type your password.");
+                }else if(_(et+"_edit").value != _(et+"_cInput").value){
+                     alert("Your password does not match."); 
+                }else{
+                    var vp = "profile="+et;
+                    vp += "&userID="+v.userID;
+                    vp += "&idKey="+v.idKey;
+                    vp += "&set="+_(et+"_edit").value;
+                    xPost(
+                        processorLink,
+                        vp,
+                        function(eep){
+                            if(eep == "true"){
+                                alert("Your password has been set.");
+                            }else{
+                                alert("Unable to set your password. PLease check your internet line.\nThank you.");
+                            }
+                            location.reload();
+                        });  
+                };
+            });
+            
+        }else{
+
+        var vp = "profile="+et;
+        vp += "&userID="+v.userID;
+        vp += "&idKey="+v.idKey;
+        vp += "&set="+_(et+"_edit").value;
+        xPost(
+            processorLink,
+            vp,
+            function(eep){
+                if(eep == "true"){
+                    if(et == "name_div"){
+                        v.username = _(et+"_edit").value;
+                    }else if(et == "phone_div"){
+                        v.contactNum = _(et+"_edit").value;
+                    }else if(et == "email_div"){
+                        v.email = _(et+"_edit").value;
+                    }else{
+                        v.address = _(et+"_edit").value;
+                    }
+                    localStorage.setItem("user",JSON.stringify(v));
+                    alert("Your Profile Update successfuly. \nThank you.");
+                    location.reload();
+                }else{
+                    alert("Fail to update your profile.  Please check your line. \nThank you.");
+                }
+            });
+        }
+    }
+    }
+    function updateCart(){
+        if(localStorage.getItem("carts")){
+            var a = JSON.parse(localStorage.getItem("carts"));
+            _("cartNum").innerText = Object.keys(a["orders"]).length;
+    }
+    }
+    updateCart();
+    </script>
+</body>
+</html>

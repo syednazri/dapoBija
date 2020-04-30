@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Document</title>
+    <script src="js/conn.js"></script>
+    <script src="js/main.js"></script>
+    <style>
+        #upload input, #upload textarea{
+            padding:8px;
+            border-radius:6px;
+            box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.7);
+            width: 80%;
+        }
+        #sPayQR{
+            width: 70%;
+        }#methodCont{
+            width: 80%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 5px;
+            border: 1px solid #000;
+            border-radius: 10px;
+            box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.8);
+            background: #dbf788;
+        }
+        #CIMB span{
+            font-size: 1rem;
+        }
+        #accNo{
+            background: none;
+            font-size: 2rem;
+            text-align: center;
+            color: black;
+        }
+        #choose, #upload{
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .mets{
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: center;
+            padding-bottom: 10px;
+        }
+        .selIcon{
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div id="logoContainer" onclick="gotoPage('index.html')">
+                <img id="theLogo" src="img/dapoBija.png">
+            </div>
+            <div class="navBtn" onclick="gotoPage('index.html')">
+                <img class="navLogo" src="img/homeBtn.png">
+                <div class="subBtn">Home</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('carts.html')">
+                <img class="navLogo" src="img/cartBtn.png">
+                <span id="cartNum" class="smlNum">0</span>
+                <div class="subBtn">My Cart</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('history.html')">
+                <img class="navLogo" src="img/historyBtn.png">
+                <div class="subBtn">History</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('profile.html')">
+                    <img class="navLogo" src="img/profileBtn.png">
+                    <div class="subBtn">Profile</div>
+                </div>
+        </nav>
+    </header>
+<form action="" method="POST" enctype="multipart/form-data" id="Form1" name="form1" onsubmit="return clearKey()" >
+    <h1>Choose your payment method</h1>
+    <div id="choose">
+        <div id="chooseSpay"><img id="sPayLogo" class="selIcon" src="img/spay.png" onclick="selected('sPay')"></div>
+        <div id="chooseCIMB"><img id="CIMBLogo" class="selIcon" src="img/cimb.png" onclick="selected('cimb')"></div>
+    
+    <div id="methodCont">
+        <div id="sPay" class="mets">
+            <h2>Scan Sarawak Pay QR</h2>
+            <img id="sPayQR" src="img/QRspay.png">
+        </div>
+        
+        <div id="cimb" class="mets">
+            <img id="CIMBLogo" src="img/cimbAccount.png">
+            <!-- <div id="CIMB" class="CIMB btn" onclick="copyText(this.id)" > -->
+                <!-- <input id="accNo" value="8603498005" type="text" disabled>
+                <span>Click here to copy the Account Number</span> -->
+            <!-- </div> -->
+        </div>
+    </div>
+    </div>
+    <div id="upload">
+        <h2>Enter your payment referance number and upload your evedance photo here</h2>
+        
+        <input type="file" id="uploadFile"  name="uploadFile" class="btn">
+        <input type="text" id="refNo" name="refNo" placeholder="Bank Ref No">
+        <input type="hidden" id="idKey" name="idKey">
+        <input type="hidden" id="amount" name="amount">
+        <input type="hidden" id="selects" name="selects">
+         <input type="submit" id="submitPayment" name="submitPayment" value="Submit" class="btn" >
+    </div>
+</form>
+    <script>
+_("Form1").action = Link+"submitPay.php";
+methodCont.style.display = "none";
+sPay.style.display = "none";
+cimb.style.display = "none";
+
+var tt = JSON.parse(localStorage.getItem("pay"));
+
+_("idKey").value = tt.tkn;
+_("amount").value = tt.d;
+
+function copyText(dd) {
+    var cT = document.getElementById(dd).children[0];
+    cT.select();
+    cT.setSelectionRange(0, 99999);
+    document.execCommand("copy");
+    alert("Bank Account Copied\n CIMB\nAccount name: Syarikat Ikhlim\nAccount Number: " + cT.value);
+}
+function selected(dx){
+    methodCont.style.display = "flex";
+    if(dx == "cimb"){
+        _("selects").value = dx;
+        sPay.style.display = "none";
+        cimb.style.display = "flex";
+    }else{
+        _("selects").value = "Sarawak Pay";
+        sPay.style.display = "flex";
+        cimb.style.display = "none";
+    }
+}
+function updateCart(){
+        if(localStorage.getItem("carts")){
+            var a = JSON.parse(localStorage.getItem("carts"));
+            _("cartNum").innerText = Object.keys(a["orders"]).length;
+        }
+        }
+        updateCart();
+function clearKey(){
+    if(localStorage.removeItem("pay")){
+        return false;
+    }
+}
+    </script>
+    
+</body>
+</html>

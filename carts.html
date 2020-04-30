@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>carts</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script>window.name = "cart";</script>
+    <script src="js/conn.js"></script>
+    <script src="js/main.js"></script>
+    <style>
+        input, textarea{
+            box-shadow: 0px 0px 5px 1px rgba(0,0,0,0.7);
+            resize: none;
+        }
+        table{
+            table-layout: auto;
+        }
+        tr td:nth-child(3), tr td:nth-child(5) {
+            text-align: right;
+        }
+        #mainContainer{
+            color: #283d2e;
+        }
+        #mainContainer h1{
+            margin: 0;
+            text-align: center;
+            background: #bdcfbd;
+            width: 100%;
+        }
+        #mainContainer h2{
+            margin: 0;
+            margin-top: 10px;
+            text-align: center;
+            background: #bdcfbd;
+            width: 100%;
+        }
+        #orderTable{
+            border-collapse: collapse;
+            width: 100%;
+            padding: 5px;
+        }
+        #orderTable th{
+            text-align: center;
+            padding: 3px 5px;
+            font-size: 0.8rem;
+            background: #bbb;
+        }
+        #userDetails_form{
+            color: #000;
+            padding: 5px;
+            margin: 8px;
+        }
+        #listContainer{
+            padding: 5px;
+            margin: 5px;
+        }
+        #delivery{
+            text-align: right;
+            padding: 5px 0px;
+        }
+        #intoducer{
+            width: 100%;
+        }
+        #deliveryDate_input, #deliveryTime_input {
+            padding: 5px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 2rem;
+            background: #fff;
+        }
+        #howFindUs{
+            padding: 5px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 1.5rem;
+            background: #fff;
+            width: 100%;
+        }
+        #friendIntro{
+            display: none;
+        }
+        .orderLst_td{
+            font-size: 0.8rem;
+            text-align: left;
+            background: rgb(255, 255, 255);
+        }
+        .prdtQty{
+            text-align: center;
+        }
+        .subTotal{
+            text-align: right;
+            font-size: 1rem;
+            border-bottom: 1px solid #000;
+            border-top: 1px solid #666;
+            background: rgb(255, 255, 255);
+        }
+        .opt_td{
+            font-size: 0.6rem;
+            text-align: left;
+            background: rgb(255, 255, 255);
+        }
+        .optQty{
+            text-align: center;
+        }
+        .gTotal{
+            font-size: 1.8rem;
+            font-weight: 600;
+            text-align: right;
+            border-bottom: 5px solid #666;
+        }
+        .cancelOrder{
+            padding: 5px;
+            font-size: 0.8rem;
+            background: rgb(255, 255, 255);
+        }
+        .cancelBtn{
+            border-radius: 5px;
+            background: #f1b1b1;
+            box-shadow: 0px 0px 3px 1px rgba(0,0,0,0.8);
+            padding: 5px;
+        }
+        .cancelDIV{
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+            padding: 5px;
+        }
+        .saperateBar{
+            border-bottom: 2px solid #000;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav>
+            <div id="logoContainer" onclick="gotoPage('index.html')">
+                <img id="theLogo" src="img/dapoBija.png">
+            </div>
+            <div class="navBtn" onclick="gotoPage('index.html')">
+                <img class="navLogo" src="img/homeBtn.png">
+                <div class="subBtn">Home</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('carts.html')">
+                <img class="navLogo" src="img/cartBtn.png">
+                <span id="cartNum" class="smlNum">0</span>
+                <div class="subBtn">My Cart</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('history.html')">
+                <img class="navLogo" src="img/historyBtn.png">
+                <div class="subBtn">History</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('profile.html')">
+                    <img class="navLogo" src="img/profileBtn.png">
+                    <div class="subBtn">Profile</div>
+                </div>
+        </nav>
+    </header>
+    <div id="mainContainer">
+        <h1>Order Summary</h1>
+        <div id="listContainer">
+            <div id="listTables"></div>
+            <div id="delivery"></div>
+            <div id="listContainerGtotal"></div>
+            <textarea rows="4" id="orderRemarks" name="orderRemarks" placeholder="Order Note (delivery time or any other special request to our team)"></textarea>
+        </div>
+        <hr>
+        <div id="deliveryDate">
+            <h2>Set your delivery date and time</h2>
+            <input type="date" id="deliveryDate_input" name="deliveryDate_input" >
+            <input type="time" id="deliveryTime_input" name="deliveryTime_input" >
+        </div>
+        <hr>
+        <div id="intoducer">
+            <h2>How do you find us?</h2>
+            <select name="howFindUs" id="howFindUs" onchange="selFriend()">
+                <option disabled selected>Please select</option>
+                <option value="google">Google</option>
+                <option value="facebook">Facebook</option>
+                <option value="friend">Friend</option>
+            </select>
+            <div id="friendIntro">
+            Please let us know your friend's phone number:
+            <input type="number" name="introducerNumber" id="introducerNumber" placeholder="Introducer Phone number">
+            <i>The phone number is only for checking purpose, if your friend is listed into our system database or not.  We shall not keep the contact number unless it is already registered into our system.</i>
+            </div>
+        </div>
+        <div id="userDetail">
+            <div id="caption1_form"><h2>Complete your details</h2> </div>
+            <input type="text" id="userName" name="userName" placeholder="Name">
+            <input type="text" id="phone" name="phone" placeholder="Phone Number">
+            <input type="text" id="email" name="email" placeholder="Email">
+            <textarea id="address" name="address" rows="6" placeholder="Delivery Adress"></textarea>
+            <input type="button" id="submit_order" name="submit_order" value="Submit Order" class="btn" onclick="submitOrder()">
+            <input class="btn cancel" type="button" value="Continue Shopping" id="cancel" name="cancel" onclick="gotoPage('index.html')">
+            <input type="button" id="clearCart" name="clearCart" value="Clear My Cart" class="btn" onclick="clearCart()">
+            <input type="hidden" id="orderList" name="orderList" >
+        </div>
+    </div>
+<script>
+var lStore = JSON.parse(localStorage.getItem("carts"));
+var userData = JSON.parse(localStorage.getItem("user"));
+_("userName").value = userData.username;
+_("phone").value = userData.contactNum;
+_("email").value = userData.email;
+_("address").value = userData.address;
+var localFile = localStorage.getItem("carts");
+_cr("listContainerGtotal","div","gTotal");
+ function listingOrder(){
+    if(Object.keys(JSON.parse(localFile).orders).length){
+    var cartXproduct = "cart="+localFile;
+    xPost(processorLink,
+    cartXproduct,
+    function(trig){
+        var JcartLS = JSON.parse(localFile);
+        var JcartXP = JSON.parse(trig);
+
+        _cr("listTables","table","orderTable");
+        
+        for(var ordLst = 1; ordLst<=Object.keys(JcartXP).length;ordLst++){
+            var countItem = 0;
+            var countOpt = 0;
+            var prdtPrice = JcartXP[ordLst]["price"];
+            var prdtQty = JcartLS["orders"][ordLst]["qty"];
+            
+            _cr("orderTable","tr","tr-1"+ordLst);
+            _cr("tr-1"+ordLst,"td","td-1"+ordLst);
+            _("td-1"+ordLst).innerHTML = '&nbsp';
+            _("td-1"+ordLst).setAttribute("class", "saperateBar");
+            _("td-1"+ordLst).setAttribute("colspan", "5");
+            
+            _cr("orderTable","tr","tr0h"+ordLst);
+            _cr("tr0h"+ordLst,"th","td1h"+ordLst);
+            _("td1h"+ordLst).innerHTML = "Product ID";
+            _cr("tr0h"+ordLst,"th","td2h"+ordLst);
+            _("td2h"+ordLst).innerHTML = "Product Name";
+            _cr("tr0h"+ordLst,"th","td3h"+ordLst);
+            _("td3h"+ordLst).innerHTML = "Unit Price";
+            _cr("tr0h"+ordLst,"th","td4h"+ordLst);
+            _("td4h"+ordLst).innerHTML = "Qty";
+            _cr("tr0h"+ordLst,"th","td5h"+ordLst);
+            _("td5h"+ordLst).innerHTML = "Total";
+            
+            _cr("orderTable","tr","tr1"+ordLst);
+            _cr("tr1"+ordLst,"td","td1"+ordLst);
+            _("td1"+ordLst).setAttribute("class","orderLst_td");
+            _("td1"+ordLst).innerHTML = JcartXP[ordLst]["productID"];
+            _cr("tr1"+ordLst,"td","td2"+ordLst);
+            _("td2"+ordLst).setAttribute("class","orderLst_td");
+            _("td2"+ordLst).innerHTML = JcartXP[ordLst]["productName"];
+            _cr("tr1"+ordLst,"td","td3"+ordLst);
+            _("td3"+ordLst).setAttribute("class","orderLst_td");
+            _("td3"+ordLst).innerHTML = numRM(prdtPrice);
+            _cr("tr1"+ordLst,"td","td4"+ordLst);
+            _("td4"+ordLst).setAttribute("class","orderLst_td prdtQty");
+            _("td4"+ordLst).innerHTML = prdtQty;
+            _cr("tr1"+ordLst,"td","td5"+ordLst);
+            _("td5"+ordLst).setAttribute("class","orderLst_td");
+            _("td5"+ordLst).innerHTML = numRM(prdtPrice * prdtQty);
+            countItem += Number(prdtPrice) * Number(prdtQty);
+            if(JcartXP[ordLst]["opt"] != "false"){
+                for(var t = 1;t<=Object.keys(JcartXP[ordLst]["opt"]).length;t++){
+                    var optPrice = JcartXP[ordLst]["opt"][t]["price"];
+                    var optQty = JcartLS["orders"][ordLst]["opt"][t]["optQty"];
+                    var optID = JcartLS["orders"][ordLst]["opt"][t]["optID"];
+                    _cr("orderTable","tr","tr"+"-opt"+t+optID);
+                    _cr("tr"+"-opt"+t+optID,"td","td1"+"-opt"+t+optID);
+                    _("td1"+"-opt"+t+optID).setAttribute("class","opt_td");
+                    _("td1"+"-opt"+t+optID).innerHTML = "";
+                    _cr("tr"+"-opt"+t+optID,"td","td2"+"-opt"+t+optID);
+                    _("td2"+"-opt"+t+optID).setAttribute("class","opt_td");
+                    _("td2"+"-opt"+t+optID).innerHTML = JcartXP[ordLst]["opt"][t]["optionName"];
+                    _cr("tr"+"-opt"+t+optID,"td","td3"+"-opt"+t+optID);
+                    _("td3"+"-opt"+t+optID).setAttribute("class","opt_td");
+                    _("td3"+"-opt"+t+optID).innerHTML = numRM(optPrice);
+                    _cr("tr"+"-opt"+t+optID,"td","td4"+"-opt"+t+optID);
+                    _("td4"+"-opt"+t+optID).setAttribute("class","opt_td optQty");
+                    _("td4"+"-opt"+t+optID).innerHTML = optQty;
+                    _cr("tr"+"-opt"+t+optID,"td","td5"+"-opt"+t+optID);
+                    _("td5"+"-opt"+t+optID).setAttribute("class","opt_td");
+                    _("td5"+"-opt"+t+optID).innerHTML = numRM(optPrice * optQty);
+                    countOpt += optPrice * optQty;
+                }
+                
+            }
+        
+        _cr("orderTable","tr","tr6"+ordLst);
+        _cr("tr6"+ordLst,"td","td6"+ordLst);
+        _("td6"+ordLst).setAttribute("colspan", "5");
+        _("td6"+ordLst).setAttribute("class", "subTotal");
+        _("td6"+ordLst).innerHTML = numRM(countItem + countOpt);
+
+        _cr("orderTable","tr","tr01"+ordLst);
+        _cr("tr01"+ordLst,"td","td01"+ordLst);
+        _("td01"+ordLst).setAttribute("class", "cancelOrder");
+        _("td01"+ordLst).setAttribute("colspan", "5");
+        _cr("td01"+ordLst,"div","cancelDIV"+ordLst);
+        _("cancelDIV"+ordLst).setAttribute("class", "cancelDIV");
+        _cr("cancelDIV"+ordLst,"div","cancelOrder"+ordLst);
+        _("cancelOrder"+ordLst).innerHTML = 'Remove';
+        _("cancelOrder"+ordLst).setAttribute("class", "cancelBtn");
+        _("cancelOrder"+ordLst).setAttribute("onclick","removeList("+ordLst+")");
+        }
+        var GrandTot = 0;
+        for(var ot=1; ot<= Object.keys(JcartXP).length; ot++){
+            GrandTot += parseFloat(_("tr6"+ot).innerText.split(" ")[1]);
+        }
+        _cr("orderTable","tr","tr-1"+ordLst);
+        _cr("tr-1"+ordLst,"td","td-1"+ordLst);
+        _("td-1"+ordLst).innerHTML = '&nbsp';
+        _("td-1"+ordLst).setAttribute("class", "saperateBar");
+        _("td-1"+ordLst).setAttribute("colspan", "5");
+
+        
+        gTotal.setAttribute("class", "gTotal");
+        gTotal.innerHTML = numRM(GrandTot);
+        deliveryFees();
+    });
+    }else{
+    listContainer.innerHTML = "Your Cart is empty.";
+    userDetail.style.display = "none";
+    deliveryDate.style.display = "none";
+    intoducer.style.display = "none";
+    }
+    
+}
+listingOrder();
+function removeList(listNum){
+    var n = JSON.parse(localStorage.getItem("carts"));
+    var totalList = Object.keys(n.orders).length;
+    for(var fs=1;fs<=totalList;fs++){
+        if(fs == listNum){
+            delete n.orders[listNum];
+        }
+    }
+    for(var db=listNum;db <= Object.keys(n.orders).length;db++){
+        n.orders[db] = n.orders[db+1];
+    }
+    localStorage.setItem("carts",JSON.stringify(n));
+    location.reload();
+}
+function updateCart(){
+    if(localStorage.getItem("carts")){
+        var a = JSON.parse(localStorage.getItem("carts"));
+        _("cartNum").innerText = Object.keys(a["orders"]).length;
+    }
+}
+updateCart();
+function clearCart(){
+    localStorage.removeItem("carts");
+    location.reload();
+}
+
+function submitOrder(){
+
+    var tod = new Date();
+    var m = tod.getMonth();
+    var d = tod.getDay();
+    var y = tod.getFullYear();
+
+    var h = tod.getHours();
+    var m = tod.getMinutes();
+
+    var sel = new Date(_("deliveryDate_input").value);
+    
+        console.log(_("deliveryTime_input").value);
+
+    if(tod >= sel){
+        alert("We are sorry to inform you that there is no delivery for today's order, please set your order for tomorrow's delivery.\n Thank you.");
+    }
+    
+    else{
+
+    var spD = _("deliveryDate_input").value;
+    var dk = spD.split("-");
+    
+    if(userName.value == "" || phone.value == "" || address.value == ""){
+        alert("Pleae complete the form.\nThank you.");
+    }else{
+    lStore["username"] = userName.value;
+    lStore["contactNum"] = phone.value;
+    lStore["email"] = email.value;
+    lStore["address"] = address.value;
+    lStore["idKey"] = userData.idKey;
+    lStore["dateOrder"] = todayDate;
+    lStore["timeOrder"] = todayTime;
+    lStore["dateDelivery"] = dk[2]+"/"+dk[1]+"/"+dk[0];
+    lStore["timeDelivery"] = _("deliveryTime_input").value;
+    lStore["orderNote"] = _("orderRemarks").value;
+    lStore["introducer"] = _("howFindUs").value;
+    lStore["introducerNumber"] = _("introducerNumber").value;
+    if(!_("deliveryFee")){
+        dFee = "";
+    }else{
+        lStore["deliveryFee"] = dFee;
+    }
+    console.log(dFee);
+    console.log(lStore["deliveryFee"]);
+
+    var orderSubmit = "submit_order="+JSON.stringify(lStore);
+    xPost(processorLink,
+    orderSubmit,
+    function(trig){
+        if(trig == "true"){
+            localStorage.removeItem("carts");
+            userData.username = _("userName").value;
+            userData.address = _("address").value;
+            userData.contactNum = _("phone").value;
+            userData.email = _("email").value;
+            localStorage.setItem("user",JSON.stringify(userData));
+            alert("Your Order has been submitted to the system. Thank you.");
+            window.location.href = "history.html";
+        }else{
+            alert("Order Submission failed.");
+        }
+    }
+    )
+}
+}
+
+}
+
+function deliveryFees(){
+    var lgg = JSON.parse(localStorage.getItem("carts"));
+    var yss = 0;
+    for(var ij=1;ij<=Object.keys(lgg.orders).length;ij++){
+        yss += parseFloat(lgg.orders[ij].qty);
+    }
+    var dG = parseFloat(_("gTotal").innerText.split(" ")[1]);
+    
+    if(Number(dG) < Number(minBuy)){
+            _cr("delivery","div","deliveryFee");
+            _("deliveryFee").innerHTML = "Delivery Fee = "+numRM(dFee);
+            _("gTotal").innerText = numRM(dG + dFee);
+    }
+    if(Number(dG) >= Number(minBuy)){
+        _("deliveryFee").innerHTML = "";
+    } 
+}
+///////////////////////////////////
+var newD = new Date();
+var dDD = String(newD.getDate()+1).padStart(2, '0');
+var dMM = String(newD.getMonth()+1).padStart(2, '0');
+var dyyyy = newD.getFullYear();
+
+var tHH = String(today.getHours()).padStart(2, '0');
+var tMM = String(today.getMinutes()).padStart(2, '0');
+var tSS = String(today.getSeconds()).padStart(2, '0');
+
+_("deliveryDate_input").value = dyyyy+"-"+dMM+"-"+dDD;
+_("deliveryTime_input").value = tHH+":"+tMM+":"+tSS;
+////////////////////////////////////
+
+
+
+//var nex = new Date(y,m,d);
+
+
+function dateCheck(){
+    var tod = new Date();
+    var m = tod.getMonth();
+    var d = tod.getDay();
+    var y = tod.getFullYear();
+
+    var h = tod.getHours();
+    var m = tod.getMinutes();
+
+    var sel = new Date(_("deliveryDate_input").value);
+    var tim = new Date();
+    //tim.setHours(_("deliveryTime_input").value.split(":")[0],_("deliveryTime_input").value.split(":")[1]);
+        //console.log(nex);
+
+    if(tod > sel){
+        alert("No more order for tomorrow's delivery.\n Thank you.");
+    }
+    // if(tod >= tim){
+    //     alert("Cannot set time befote the current time");
+    // }
+}
+function selFriend(){
+    if(_("howFindUs").value == "friend"){
+        _("friendIntro").style.display = "block";
+    }else{
+        _("friendIntro").style.display = "none";
+    }
+}
+    </script>
+</body>
+</html>

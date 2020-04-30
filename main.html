@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stall</title>
+    <link rel="stylesheet" href="css/main.css">
+    <script src="js/conn.js"></script>
+    <script src="js/main.js"></script>
+    <script>window.name = "index";</script>
+    <style>
+        #theFlyers{
+            width: 100%;
+            padding: 10px;
+            box-shadow: 0px 0px 3px rgba(0,0,0,0.8);
+        }
+        #theOrder{
+            padding:5px;
+            margin: 5px;
+            border: solid 1px #999;
+            background:#fff;
+        }
+        #orderList{
+            padding:5px;
+            margin: 5px;
+            
+            background:#fff;
+        }
+        #orderList h2{
+            margin: 0px;
+        }
+        #totalOrder{
+            padding:5px;
+            margin: 5px;
+            background:#fff;
+        }
+        #input{
+            
+            display: grid;
+            grid-template-columns: auto auto;
+
+            column-gap: 0.5rem;
+            row-gap: 0.5rem;
+            width: 100%;
+            /* margin: auto auto; */
+
+        }
+        .item-div{
+            width: 100%;
+            background:#ffffff;
+            /* display:flex;
+            flex-direction:column; */
+            padding:5px;
+            /* margin:5px 10px; */
+            /* border:solid 1px #000; */
+            border: none;
+            box-shadow:0px 0px 10px 1px rgba(0,0,0,0.6);
+        }
+        .itemName{
+            font-weight: 600;
+            color: #fff;
+            background: #333;
+            padding: 5px;
+        }
+        .itemPrice{
+            font-size:1.2rem;
+            font-weight: 600;
+        }
+        .stat{
+            text-align: center;
+            font-weight: 900;
+            color:#ffffff;
+            background:rgb(133, 28, 28);
+        }
+        .addMinusBtn{
+            position: relative;
+            display:grid;
+            grid-template-columns: 50% 50%;
+            grid-gap: 0px;
+            text-align: center;
+            bottom: 0px;
+            border-radius: 10px;
+            box-shadow: 0px 1px 3px 1px rgba(0,0,0,0.8);
+        }
+        .addBtn, .removeBtn{
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            padding: 5px 5px;
+            justify-content: center;
+            
+        }
+        .addBtn{
+            background: #a1ebb7;
+            border-radius: 10px 0px 0px 10px;
+        }
+        .removeBtn{
+            background: #ffadad;
+            border-radius: 0px 10px 10px 0px;
+        }
+        .numDis{
+            font-size: 0.8rem;
+            padding: 0;
+            margin: 0;
+            color:black;
+            background:none;
+        }
+        .opts{
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body id="theBody">
+    <header>
+        <nav>
+            <div id="logoContainer" onclick="gotoPage('index.html')">
+                <img id="theLogo" src="img/dapoBija.png">
+            </div>
+            <div class="navBtn" onclick="gotoPage('index.html')">
+                <img class="navLogo" src="img/homeBtn.png">
+                <div class="subBtn">Home</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('carts.html')">
+                <img class="navLogo" src="img/cartBtn.png">
+                <span id="cartNum" class="smlNum">0</span>
+                <div class="subBtn">My Cart</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('history.html')">
+                <img class="navLogo" src="img/historyBtn.png">
+                <div class="subBtn">History</div>
+            </div>
+            <div class="navBtn" onclick="gotoPage('profile.html')">
+                    <img class="navLogo" src="img/profileBtn.png">
+                    <div class="subBtn">Profile</div>
+                </div>
+        </nav>
+    </header>
+    <div id="mainContainer">
+        <div id="ads"></div>
+    <img id="theFlyers">
+    <div id="order">
+        <div id="theOrder" class="theOrder">
+            <div id="orderList">
+                <h2>Selected Item</h2>
+            </div>
+            <div id="totalOrder">
+                <h2>Total Selected</h2>
+                <div id="delivery"></div>
+            </div>
+            <div class="btn" id="confirmOrder" onclick="addCart()">Add To My Cart</div>
+            <div class="btn cancel" id="back" onclick="gotoPage('index.html')">Continue Shopping</div>
+        </div>
+        <div id="input"></div>
+        
+    </div>
+    </div>
+    <script>
+        function getFlyers(){
+            var ttg = "mainContent=stall";
+            ttg += "&";
+            ttg += "stallNum="+localStorage.getItem("stall");
+            xPost(
+                processorLink,
+                ttg,
+                function(trig){
+                    _("theFlyers").src = imgLink + "flyers/" + trig;
+                }
+            )
+        
+        }
+        getFlyers();
+        function getProduct(){
+            _cr("order","style","inputStyle");
+            _("inputStyle").innerHTML += ".order{box-shadow:0px 0px 10px 1px rgba(0,0,0,0.6);display:flex;flex-direction:column;margin:5px 0px;padding:5px;border:solid 1px #666;border-radius:5px;}";
+            _("inputStyle").innerHTML += ".cancelOrder{display:flex;justify-content:flex-end;margin-bottom:5px;}";
+            _("inputStyle").innerHTML += ".orderListCont{margin:5px 0px;padding:5px;font-size:1.6rem}";
+            _("inputStyle").innerHTML += ".optionsContMain{width:100%}";
+            _("inputStyle").innerHTML += ".optionsCont,.orderContainer{font-size:1rem;display:flex;justify-content:space-between;margin:5px 10px;padding:5px;border-bottom:solid 2px #999;color:#000;}";
+            _("inputStyle").innerHTML += ".options, .orderQty-div{background:#000;margin:0px 5px;padding:0px 5px;border-radius:10px;color:#fff;}";
+            _("inputStyle").innerHTML += ".selectOpt{padding:10px;margin-top:5px;background:#c0d8cc;}";
+            _("inputStyle").innerHTML += ".avail{padding:5px;margin-top:8px;font-size:1.2rem;}";
+            _("inputStyle").innerHTML += ".optSel{margin:5px;padding:5px;background:#999;cursor:pointer;}";
+            _("inputStyle").innerHTML += ".optSubTotal,.orderContainerTotal{display:flex;justify-content:flex-end;font-size:1.6rem;border-bottom:2px solid #666;}";
+            _("inputStyle").innerHTML += ".productImg{width:100%;}";
+                    
+            xPost(
+            processorLink,
+            "mainContent=product&flyersID="+localStorage.getItem("stall"),
+                function(trig){
+                    
+                var jsonData = JSON.parse(trig);
+                
+                    var JsonDataLength = parseInt(jsonData[1]["id"]) + parseInt(Object.keys(jsonData).length);
+                    for(var ts=1;ts<=Object.keys(jsonData).length;ts++){
+
+                        if(jsonData[ts]["stat"] != "2"){
+
+                            _cr("input","div","item-div"+ts);
+                            _("item-div"+ts).setAttribute("class","item-div");
+                            
+                            _cr("item-div"+ts,"div","itemDetail"+ts);
+                            if(jsonData[ts]["img"] !== ""){
+                            _cr("itemDetail"+ts,"img","productImg"+ts);
+                            _("productImg"+ts).setAttribute("src",imgLink + "product/"+localStorage.getItem("stall")+"/" +jsonData[ts]["img"]);
+                            _("productImg"+ts).setAttribute("class","productImg");
+                            }
+                            _cr("itemDetail"+ts,"div","itemName"+ts);
+                            _("itemName"+ts).setAttribute("class","itemName");
+                            _("itemName"+ts).innerText = jsonData[ts]["name"];
+
+                            var var_itemPrice = jsonData[ts]["price"];
+                            if(var_itemPrice == ""){
+                                var_itemPrice = 0;
+                            }
+                            _cr("itemDetail"+ts,"div","itemPrice"+ts);
+                            _("itemPrice"+ts).setAttribute("class","itemPrice");
+                            _("itemPrice"+ts).innerHTML = numRM(var_itemPrice);
+                            
+                            _cr("itemDetail"+ts,"div","itemDesc"+ts);
+                            _("itemDesc"+ts).setAttribute("class","itemDesc");
+                            _("itemDesc"+ts).innerText = jsonData[ts]["description"];
+
+                            var dpe;
+                            if(jsonData[ts]["stat"] == "1"){
+                                dpe = "SOLD OUT";
+                            }else if(jsonData[ts]["stat"] == "2"){
+                                dpe = "Not Available";
+                            }else{
+                                dpe = "";
+                            }
+                            _cr("itemDetail"+ts,"div","stat"+ts);
+                            _("stat"+ts).setAttribute("class","stat");
+                            _("stat"+ts).innerHTML = dpe;
+
+                            var selOpt = "false";
+                            if(jsonData[ts]["option"] != ""){
+                                
+                                _cr("item-div"+ts,"div","label"+ts);
+                                _("label"+ts).setAttribute("class","avail");
+
+                                _("label"+ts).innerText = "Available Option : ";
+                                _cr("item-div"+ts,"div","selectOpt"+ts);
+                                _("selectOpt"+ts).setAttribute("class","selectOpt");
+                                
+                                for(var yt=1;yt<=Object.keys(jsonData[ts]["option"]).length;yt++){
+                                    var optPrice = jsonData[ts]["option"][yt]["optPrice"]
+                                    if(optPrice == ""){
+                                        optPrice = 0;
+                                    }
+                                    _cr("selectOpt"+ts,"hr", "");
+                                    
+                                    _cr("selectOpt"+ts,"input","qtyOpts"+ts+"-"+yt);
+                                    // _("qtyOpts"+ts+"-"+yt).setAttribute("placeholder","Your Order Quantity");
+                                    _("qtyOpts"+ts+"-"+yt).setAttribute("type","number");
+                                    _("qtyOpts"+ts+"-"+yt).setAttribute("class","numDis");
+                                    _("qtyOpts"+ts+"-"+yt).setAttribute("readonly","readonly");
+
+                                    _cr("selectOpt"+ts,"div", "opts-"+ts+"-"+yt);
+                                    _("opts-"+ts+"-"+yt).setAttribute("class","opts");
+                                    _("opts-"+ts+"-"+yt).innerText = jsonData[ts]["option"][yt]["optName"];
+
+                                    _cr("selectOpt"+ts,"div", "optsPrice-"+ts+"-"+yt);
+                                    _("optsPrice-"+ts+"-"+yt).innerText = numRM(optPrice);
+
+                                    
+                                    
+                                    _cr("selectOpt"+ts,"div","addMinusBtn"+ts+"-"+yt);
+                                    _("addMinusBtn"+ts+"-"+yt).setAttribute("class", "addMinusBtn");
+
+                                    _cr("addMinusBtn"+ts+"-"+yt,"div","addItem"+ts+"-"+yt);
+                                    _("addItem"+ts+"-"+yt).innerHTML = "Add Order";
+                                    _("addItem"+ts+"-"+yt).setAttribute("class", "addBtn");
+                                    _("addItem"+ts+"-"+yt).setAttribute(
+                                        "onclick",
+                                        "addOrder('"+ts+"','"+_("qtyOpts"+ts+"-"+yt).value+"','"+yt+"','"+jsonData[ts]["option"][yt]["optID"]+"','"+jsonData[ts]["id"]+"')"
+                                        );
+
+                                    _cr("addMinusBtn"+ts+"-"+yt,"div","minusItem"+ts+"-"+yt);
+                                    _("minusItem"+ts+"-"+yt).innerHTML = "Remove Order";
+                                    _("minusItem"+ts+"-"+yt).setAttribute("class", "removeBtn");
+                                    _("minusItem"+ts+"-"+yt).setAttribute(
+                                        "onclick",
+                                        "minusOrder('"+ts+"','"+_("qtyOpts"+ts+"-"+yt).value+"','"+yt+"','"+jsonData[ts]["option"][yt]["optID"]+"','"+jsonData[ts]["id"]+"')"
+                                        );
+                                }
+                            }else{
+
+                            _cr("item-div"+ts,"input","qty"+ts);
+                            // _("qty"+ts).setAttribute("placeholder","Your Order Quantity");
+                            _("qty"+ts).setAttribute("type","number");
+                            _("qty"+ts).setAttribute("class","numDis");
+                            _("qty"+ts).setAttribute("readonly","readonly");
+
+                            _cr("item-div"+ts,"div","addMinusBtn"+ts);
+                            _("addMinusBtn"+ts).setAttribute("class", "addMinusBtn");
+
+                            _cr("addMinusBtn"+ts,"div","addItem"+ts);
+                            _("addItem"+ts).innerHTML = "Add Order";
+                            _("addItem"+ts).setAttribute("class", "addBtn");
+                            _("addItem"+ts).setAttribute(
+                                "onclick",
+                                "addOrder('"+ts+"','"+_("qty"+ts).value+"','"+selOpt+"','none','"+jsonData[ts]["id"]+"')"
+                                );
+
+                            _cr("addMinusBtn"+ts,"div","minusItem"+ts);
+                            _("minusItem"+ts).innerHTML = "Remove Order";
+                            _("minusItem"+ts).setAttribute("class", "removeBtn");
+                            _("minusItem"+ts).setAttribute(
+                                "onclick",
+                                "minusOrder('"+ts+"','"+_("qty"+ts).value+"','"+selOpt+"','none','"+jsonData[ts]["id"]+"')"
+                                );
+                            }
+
+                            if(_("stat"+ts).innerHTML != "" ){
+                                _("addMinusBtn"+ts).style.display = "none";
+                            }
+                        }
+                    }
+                }
+            )
+            
+        }
+        getProduct()
+        _cr("totalOrder","div","grandTotal");
+        _("grandTotal").setAttribute("class","orderContainerTotal");
+        function addOrder(on,oqty,oOpt,optID,orderID){
+            
+            if(oqty == ""){oqty = 1;}
+            if(!_("order"+on)){
+                
+                _cr("orderList","div","order"+on);
+                _("order"+on).setAttribute("class","order");
+
+                _cr("order"+on,"div","cancelOrder"+on);
+                _("cancelOrder"+on).innerHTML = '<img width="20" height="20" src="img/xBtn.png">';
+                _("cancelOrder"+on).setAttribute("class", "cancelOrder");
+                _("cancelOrder"+on).setAttribute("onclick","cancelOrder("+on+")");
+
+                _cr("order"+on,"input","orderID"+on);
+                _("orderID"+on).setAttribute("value",orderID);
+                _("orderID"+on).setAttribute("type","hidden");
+                
+                _cr("order"+on,"div","order-div"+on);
+                _("order-div"+on).setAttribute("class","orderListCont");
+                _("order-div"+on).innerHTML = _("itemName"+on).innerText;
+
+                _cr("order"+on,"div","orderContainer"+on);
+                _("orderContainer"+on).setAttribute("class","orderContainer");
+
+                _cr("order"+on,"div","orderContainerTotal"+on);
+                _("orderContainerTotal"+on).setAttribute("class","orderContainerTotal");
+                _("orderContainerTotal"+on).innerHTML = numRM(oqty);
+
+                _cr("orderContainer"+on,"div","order-unitPrice"+on);
+                _("order-unitPrice"+on).innerHTML = _("itemPrice"+on).innerText;
+
+                _cr("orderContainer"+on,"div","order-Times"+on);
+                _("order-Times"+on).innerHTML = " X ";
+                
+                _cr("orderContainer"+on,"div","orderQty-div"+on);
+                _("orderQty-div"+on).innerText = oqty;
+                _("orderQty-div"+on).setAttribute("class", "orderQty-div");
+                
+                _cr("orderContainer"+on,"div","subOrder-total"+on);
+                if(_("qty"+on)){
+                _("qty"+on).value = _("orderQty-div"+on).innerText;
+            }
+            }else{
+                    _("orderQty-div"+on).innerText = parseInt(_("orderQty-div"+on).innerText) + parseInt(oqty);
+                    if(_("qty"+on)){
+                    _("qty"+on).value = _("orderQty-div"+on).innerText;
+                    }
+            }
+            _("subOrder-total"+on).innerText = numRM(parseInt(_("order-unitPrice"+on).innerHTML.split(" ")[1]) * parseInt(_("orderQty-div"+on).innerText));
+            _("orderContainerTotal"+on).innerHTML = _("subOrder-total"+on).innerText;
+
+            if(oOpt != "false"){
+
+                _("orderContainerTotal"+on).style.display = "none";
+                if(!_("optionsContainer"+on)){
+                    
+                _cr("order"+on,"div","optionsContainer"+on);
+                _("optionsContainer"+on).setAttribute("class", "optionsContMain");
+
+                _cr("order"+on,"div","optSubTotal"+on);
+                _("optSubTotal"+on).setAttribute("class", "optSubTotal");
+                }
+                if(!_("optSel"+on +"-"+ oOpt)){
+                    _cr("optionsContainer"+on,"div","optionsContainer"+on +"-"+ oOpt);
+                    _("optionsContainer"+on +"-"+ oOpt).setAttribute("class", "optionsCont");
+
+                    _cr("optionsContainer"+on +"-"+ oOpt,"input","optID"+on +"-"+ oOpt);
+                    _("optID"+on +"-"+ oOpt).setAttribute("value",optID);
+                    _("optID"+on +"-"+ oOpt).setAttribute("type","hidden");
+
+                    _cr("optionsContainer"+on +"-"+ oOpt,"div","optSelName"+on +"-"+ oOpt);
+                    _("optSelName"+on +"-"+ oOpt).innerText = _("opts-"+on +"-"+ oOpt).innerText;
+                    
+
+                    _cr("optionsContainer"+on +"-"+ oOpt,"div","optSelPrice"+on +"-"+ oOpt);
+                    _("optSelPrice"+on +"-"+ oOpt).innerText = _("optsPrice-"+on+"-"+oOpt).innerText;
+
+                    _cr("optionsContainer"+on +"-"+ oOpt,"div","optSelTimes"+on +"-"+ oOpt);
+                    _("optSelTimes"+on +"-"+ oOpt).innerText = "X";
+
+                    _cr("optionsContainer"+on +"-"+ oOpt,"div","optSel"+on +"-"+ oOpt);
+                    _("optSel"+on +"-"+ oOpt).innerText = oqty;
+                    _("optSel"+on +"-"+ oOpt).setAttribute("class", "options");
+
+                    _cr("optionsContainer"+on +"-"+ oOpt,"div","optSelTotal"+on +"-"+ oOpt);
+
+                    _("qtyOpts"+on+"-"+oOpt).value = _("optSel"+on +"-"+ oOpt).innerText;
+                }else{
+                    _("optSel"+on +"-"+ oOpt).innerText = parseInt(_("optSel"+on +"-"+ oOpt).innerText) + parseInt(oqty);
+                    _("qtyOpts"+on+"-"+oOpt).value = _("optSel"+on +"-"+ oOpt).innerText;
+                }
+                _("optSelTotal"+on +"-"+ oOpt).innerText = numRM(_("optSelPrice"+on +"-"+ oOpt).innerText.split(" ")[1] * _("optSel"+on +"-"+ oOpt).innerText);
+                var overAllOptTotal = 0;
+                for(var qe=0;qe<_("optionsContainer"+on).childElementCount;qe++){
+                    overAllOptTotal += parseFloat(_("optionsContainer"+on).children[qe].children[5].innerText.split(" ")[1]);
+                }
+                _("optSubTotal"+on).innerText = numRM(parseFloat(overAllOptTotal) + parseFloat(_("subOrder-total"+on).innerText.split(" ")[1]));
+            }  
+            countGT(); 
+            recordCart();
+        }
+        function minusOrder(mn,mqty,mOpt,optID,orderID){
+            if(mqty == ""){mqty = 1;}
+            if(_("order"+mn)){
+                if(mOpt != "false"){
+                    if(_("optSel"+mn +"-"+ mOpt)){
+                        _("optSel"+mn +"-"+ mOpt).innerText = parseInt(_("optSel"+mn +"-"+ mOpt).innerText) - parseInt(mqty);
+                        _("orderQty-div"+mn).innerText = parseInt(_("orderQty-div"+mn).innerText) - parseInt(mqty);
+                        
+                        _("qtyOpts"+mn+"-"+mOpt).value = _("optSel"+mn +"-"+ mOpt).innerText;
+
+                        _("optSelTotal"+mn +"-"+ mOpt).innerText = numRM(_("optSelPrice"+mn +"-"+ mOpt).innerText.split(" ")[1] * _("optSel"+mn +"-"+ mOpt).innerText);
+                        _("subOrder-total"+mn).innerText = numRM(parseInt(_("order-unitPrice"+mn).innerHTML.split(" ")[1]) * parseInt(_("orderQty-div"+mn).innerText));
+
+                        var overAllOptTotal = 0;
+                        for(var qe=0;qe<_("optionsContainer"+mn).childElementCount;qe++){
+                            overAllOptTotal += parseFloat(_("optionsContainer"+mn).children[qe].children[5].innerText.split(" ")[1]);
+                        }
+                        _("optSubTotal"+mn).innerText = numRM(parseFloat(overAllOptTotal) + parseFloat(_("subOrder-total"+mn).innerText.split(" ")[1]));
+
+                        if(parseFloat(_("optSel"+mn +"-"+ mOpt).innerText) == 0){
+                            _("optionsContainer"+mn +"-"+ mOpt).parentNode.removeChild(_("optionsContainer"+mn +"-"+ mOpt));
+                        } 
+                        
+                    }
+                    if(parseFloat(_("orderQty-div"+mn).innerText) == 0){
+                        _("order"+mn).parentNode.removeChild(_("order"+mn));
+                    }
+                }else{
+                    _("orderQty-div"+mn).innerText = parseInt(_("orderQty-div"+mn).innerText) - parseInt(mqty);
+                    _("subOrder-total"+mn).innerText = numRM(parseInt(_("order-unitPrice"+mn).innerHTML.split(" ")[1]) * parseInt(_("orderQty-div"+mn).innerText));
+                    _("orderContainerTotal"+mn).innerHTML = _("subOrder-total"+mn).innerText;
+
+                    if(_("qty"+mn)){
+                    _("qty"+mn).value = _("orderQty-div"+mn).innerText;
+                    }
+
+                    if(parseFloat(_("orderContainerTotal"+mn).innerText.split(" ")[1]) == 0){
+                        _("order"+mn).parentNode.removeChild(_("order"+mn));
+                    }
+                }
+            }
+            countGT();
+            recordCart();
+        }
+        function countGT(){
+            var totGT = 0;
+            var countOrder = _("orderList").children.length;
+            for(var fr=1; fr<countOrder;fr++){
+                var theOrder;
+                if(_("orderList").children[fr].children[6] == null){
+                    theOrder = parseFloat(_("orderList").children[fr].children[4].innerText.split(" ")[1]);
+                }else{
+                    theOrder = parseFloat(_("orderList").children[fr].children[6].innerText.split(" ")[1]);
+                };
+                totGT += theOrder;
+            }
+            _("grandTotal").innerText = numRM(totGT);
+        }
+        function cancelOrder(cw){
+            var cr = _("order"+cw);
+            cr.parentNode.removeChild(cr);
+            countGT();
+            recordCart();
+        }
+        countGT();
+        var j;
+        function recordCart(){
+            j = JSON.parse(localStorage.getItem("carts"));
+            if(_("orderList").childElementCount == 1){dataStore ="{}"}else{
+                    var totalOrder = _("orderList").childElementCount - 1;
+                    var dataStore;
+                    var pp = Object.keys(JSON.parse(localStorage.getItem("carts")).orders).length;
+                    pp += 1;
+                    for(var ls=1;ls<=totalOrder;ls++,pp++){
+                        dataStore = '{';
+                        dataStore += '"adsID":"'+localStorage.getItem("stall")+'",';
+                        dataStore += '"productID":"'+orderList.children[ls].children[1].value+'",';
+                        dataStore += '"qty":"'+orderList.children[ls].children[3].children[2].innerText+'",';
+                        dataStore += '"opt":';
+                            
+                            if(orderList.children[ls].children[5] == null){
+                                dataStore += '{}';
+                            }else{
+                                dataStore += '{';
+                                var childCount = orderList.children[ls].children[5].childElementCount;
+                                for(var lsO = 1;lsO<=childCount;lsO++){
+                                    dataStore += '"'+lsO+'":';
+                                    dataStore += '{';
+                                        dataStore += '"optID":"'+orderList.children[ls].children[5].children[lsO-1].children[0].value+'",';
+                                        dataStore += '"optQty":"'+orderList.children[ls].children[5].children[lsO-1].children[4].innerText+'"';
+                                    dataStore += '}';
+                                    if(lsO<childCount){                    
+                                    dataStore += ',';
+                                    }
+                                }
+                                dataStore += '}';
+                            }
+                            dataStore += '}';
+                    
+                        j.orders[pp] = JSON.parse(dataStore);
+                    }
+        }
+        }
+        function addCart(){
+            if(_("orderList").childElementCount == 1){
+                alert("Your order list is empty.  Please select your order. Thank you.");
+            }else{
+                    
+                    localStorage.setItem("carts",JSON.stringify(j));
+                    _("cartNum").innerText = Object.keys(j.orders).length;
+                    alert("Your order list added to your cart, please check your cart.\nThank you.");
+                    updateCart();
+                    window.location.reload();
+                    // window.location.href = "carts.html";
+                }
+        }
+    function updateCart(){
+    if(localStorage.getItem("carts")){
+        var a = JSON.parse(localStorage.getItem("carts"));
+        _("cartNum").innerText = Object.keys(a["orders"]).length;
+        }
+    }
+    updateCart();
+    </script>
+    <footer>
+        
+    </footer>
+</body>
+</html>
