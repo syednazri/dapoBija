@@ -1,8 +1,3 @@
-// var processorLink = "http://localhost/ikhlim/webapps/apk2/release/processor.php";
-// var adsLink = "http://localhost/ikhlim/webapps/apk2/release/adsPage.php";
-// var imgLink = "http://localhost/ikhlim/webapps/apk2/release/img/";
-// var Link = "http://localhost/ikhlim/webapps/apk2/release/";
-
 var processorLink = "http://dapobija.nineat.com/processor.php";
 var adsLink = "http://dapobija.nineat.com/adsPage.php";
 var imgLink = "http://dapobija.nineat.com/img/";
@@ -21,15 +16,14 @@ function xPost(processPage,postParamenter,elements){
     }
     z.send(postParamenter);
 }
-xPost("http://dapobija.nineat.com/vcheck.php","vcheck=1.0.1",
+xPost("http://dapobija.nineat.com/vcheck.php","vcheck=1.0.0",
 function(opr){
     var dth = JSON.parse(opr);
     dFee = dth.dfee;
     minBuy = dth.minBuy;
 
     if(dth.vCheck == "false"){
-        window.location.href = "http://dapobija.nineat.com/apk/dapobija.apk";
+        window.location.href = "http://dapobija.nineat.com/apk";
     }
-
 }
 )
