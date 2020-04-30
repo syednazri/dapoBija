@@ -16,7 +16,7 @@ function xPost(processPage,postParamenter,elements){
     }
     z.send(postParamenter);
 }
-xPost("http://dapobija.nineat.com/vcheck.php","vcheck=1.0.0",
+xPost("http://dapobija.nineat.com/vcheck.php","vcheck=1.0.2",
 function(opr){
     var dth = JSON.parse(opr);
     dFee = dth.dfee;
