@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "com.ikhlim.dapobija"
+    versionCode = "10"
+    version     = "1.0.0" >
+
+    <name>dapoBija</name>
+    <description>
+      COD service
+    </description>
+    <author href="http://dapobija.nineat.com" email="syednazri80@gmail.com">
+      Syarikat Ikhlim
+    </author>
+    <platform name="android">
+        <!-- you can use any density that exists in the Android project -->
+        <splash src="img/dapoBija.png" density="land-hdpi" />
+        <splash src="img/dapoBija.png" density="land-ldpi" />
+        <splash src="img/dapoBija.png" density="land-mdpi" />
+        <splash src="img/dapoBija.png" density="land-xhdpi" />
+        <splash src="img/dapoBija.png" density="land-xxhdpi" />
+        <splash src="img/dapoBija.png" density="land-xxxhdpi" />
+
+        <splash src="img/dapoBija.png" density="port-hdpi" />
+        <splash src="img/dapoBija.png" density="port-ldpi" />
+        <splash src="img/dapoBija.png" density="port-mdpi" />
+        <splash src="img/dapoBija.png" density="port-xhdpi" />
+        <splash src="img/dapoBija.png" density="port-xxhdpi" />
+        <splash src="img/dapoBija.png" density="port-xxxhdpi" /> 
+    </platform>
+
+    <!-- all platforms -->
+    <preference name="phonegap-version" value="cli-9.0.0" />
+    <preference name="orientation" value="portrait" />
+    <preference name="fullscreen" value="true" />
+    <preference name="SplashScreenDelay" value="2000" />
+
+    <!-- Android only -->
+    <preference name="android-build-tool" value="ant|gradle" />
+    <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-maxSdkVersion" value="19" />
+    <preference name="android-targetSdkVersion" value="26" />
+    <preference name="android-installLocation" value="auto" />
+    <preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" />
+    
+    <access origin="*" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+    
+<plugin name="cordova-plugin-device" spec="1.1.2" />
+<plugin name="cordova-plugin-inappbrowser" spec="1.3.0" />
+<plugin name="cordova-plugin-splashscreen" spec="3.2.2" />
+<plugin name="cordova-plugin-whitelist" spec="1.3.4" />
+
+    
+<icon src="img/dapoBija.png" />
+  <splash src="img/dapoBija.png" />
+</widget>
