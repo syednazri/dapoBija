@@ -33,7 +33,7 @@
     <preference name="phonegap-version" value="cli-9.0.0" />
     <preference name="orientation" value="portrait" />
     <preference name="fullscreen" value="true" />
-    <preference name="SplashScreenDelay" value="2000" />
+    <preference name="SplashScreenDelay" value="2500" />
     <preference name="SplashMaintainAspectRatio" value="false" />
 
     <!-- Android only -->
@@ -42,8 +42,9 @@
     <preference name="android-maxSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="26" />
     <preference name="android-installLocation" value="auto" />
+    <preference name="SplashShowOnlyFirstTime" value="false" />
     <preference name="android-windowSoftInputMode" value="stateVisible" />
-<!--     <preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" /> -->
+<!-- <preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" /> -->
     
     <access origin="*" />
     <allow-intent href="http://*/*" />
