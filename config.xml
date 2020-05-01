@@ -49,6 +49,7 @@
     <preference name="SplashScreenDelay" value="2750" />
     <preference name="SplashMaintainAspectRatio" value="false" />
     <preference name="FadeSplashScreenDuration" value="750"/>
+    <preference name="ShowSplashScreenSpinner" value="false"/>
     
     <access origin="*" />
     <allow-intent href="http://*/*" />
