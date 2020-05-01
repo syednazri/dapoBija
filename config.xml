@@ -14,19 +14,19 @@
     </author>
     <platform name="android">
         <!-- you can use any density that exists in the Android project -->
-        <splash src="img/splash.jpg" density="land-hdpi" />
-        <splash src="img/splash.jpg" density="land-ldpi" />
-        <splash src="img/splash.jpg" density="land-mdpi" />
-        <splash src="img/splash.jpg" density="land-xhdpi" />
-        <splash src="img/splash.jpg" density="land-xxhdpi" />
-        <splash src="img/splash.jpg" density="land-xxxhdpi" />
+        <splash src="img/splash.png" density="land-hdpi" />
+        <splash src="img/splash.png" density="land-ldpi" />
+        <splash src="img/splash.png" density="land-mdpi" />
+        <splash src="img/splash.png" density="land-xhdpi" />
+        <splash src="img/splash.png" density="land-xxhdpi" />
+        <splash src="img/splash.png" density="land-xxxhdpi" />
 
-        <splash src="img/splash.jpg" density="port-hdpi" />
-        <splash src="img/splash.jpg" density="port-ldpi" />
-        <splash src="img/splash.jpg" density="port-mdpi" />
-        <splash src="img/splash.jpg" density="port-xhdpi" />
-        <splash src="img/splash.jpg" density="port-xxhdpi" />
-        <splash src="img/splash.jpg" density="port-xxxhdpi" /> 
+        <splash src="img/splash.png" density="port-hdpi" />
+        <splash src="img/splash.png" density="port-ldpi" />
+        <splash src="img/splash.png" density="port-mdpi" />
+        <splash src="img/splash.png" density="port-xhdpi" />
+        <splash src="img/splash.png" density="port-xxhdpi" />
+        <splash src="img/splash.png" density="port-xxxhdpi" /> 
     </platform>
 
     <!-- all platforms -->
@@ -34,7 +34,7 @@
     <preference name="orientation" value="portrait" />
     <preference name="fullscreen" value="true" />
     <preference name="SplashScreenDelay" value="2000" />
-<!--     <preference name="SplashMaintainAspectRatio" value="true" /> -->
+    <preference name="SplashMaintainAspectRatio" value="false" />
 
     <!-- Android only -->
     <preference name="android-build-tool" value="ant|gradle" />
@@ -42,7 +42,8 @@
     <preference name="android-maxSdkVersion" value="19" />
     <preference name="android-targetSdkVersion" value="26" />
     <preference name="android-installLocation" value="auto" />
-    <preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" />
+    <preference name="android-windowSoftInputMode" value="stateVisible" />
+<!--     <preference name="android-windowSoftInputMode" value="stateVisible|adjustResize" /> -->
     
     <access origin="*" />
     <allow-intent href="http://*/*" />
@@ -59,5 +60,5 @@
 
     
 <icon src="img/dapoBija.png" />
-  <splash src="img/splash.jpg" />
+  <splash src="img/splash.png" />
 </widget>
