@@ -2,14 +2,14 @@
 <widget xmlns   = "http://www.w3.org/ns/widgets"
     xmlns:gap   = "http://phonegap.com/ns/1.0"
     id          = "com.ikhlim.dapobija"
-    versionCode = "100023"
-    version     = "1.0.23" >
+    versionCode = "100024"
+    version     = "1.0.24" >
 
     <name>dapoBija</name>
     <description>
       COD service
     </description>
-    <author href="http://dapobija.nineat.com" email="syednazri80@gmail.com">
+    <author href="https://dapobija.nineat.com" email="syednazri80@gmail.com">
       Syarikat Ikhlim
     </author>
     <platform name="android">
