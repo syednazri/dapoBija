@@ -1,7 +1,7 @@
-var processorLink = "http://dapobija.nineat.com/processor.php";
-var adsLink = "http://dapobija.nineat.com/adsPage.php";
-var imgLink = "http://dapobija.nineat.com/img/";
-var Link = "http://dapobija.nineat.com/";
+var processorLink = "https://dapobija.nineat.com/processor.php";
+var adsLink = "https://dapobija.nineat.com/adsPage.php";
+var imgLink = "https://dapobija.nineat.com/img/";
+var Link = "https://dapobija.nineat.com/";
 var dFee;
 var minBuy;
 
@@ -16,14 +16,14 @@ function xPost(processPage,postParamenter,elements){
     }
     z.send(postParamenter);
 }
-xPost("http://dapobija.nineat.com/vcheck.php","vcheck=1.0.27",
+xPost("https://dapobija.nineat.com/vcheck.php","vcheck=1.0.27",
 function(opr){
     var dth = JSON.parse(opr);
     dFee = dth.dfee;
     minBuy = dth.minBuy;
 
     if(dth.vCheck == "false"){
-        window.location.href = "http://dapobija.nineat.com/apk";
+        window.location.href = "https://play.google.com/store/apps/details?id=com.ikhlim.dapobija";
     }
 }
 )
