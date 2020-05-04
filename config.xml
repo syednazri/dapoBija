@@ -2,8 +2,8 @@
 <widget xmlns   = "http://www.w3.org/ns/widgets"
     xmlns:gap   = "http://phonegap.com/ns/1.0"
     id          = "com.ikhlim.dapobija"
-    versionCode = "10002"
-    version     = "1.0.11" >
+    versionCode = "100022"
+    version     = "1.0.22" >
 
     <name>dapoBija</name>
     <description>
@@ -38,7 +38,7 @@
 
     <!-- Android only -->
     <preference name="android-build-tool" value="ant|gradle" />
-    <preference name="android-minSdkVersion" value="19" />
+    <preference name="android-minSdkVersion" value="28" />
 <!--     <preference name="android-maxSdkVersion" value="19" /> -->
     <preference name="android-targetSdkVersion" value="28" />
     <preference name="android-installLocation" value="auto" />
