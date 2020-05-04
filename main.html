@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'unsafe-inline'; style-src * 'unsafe-inline'; media-src *" />
     <title>Stall</title>
     <link rel="stylesheet" href="css/main.css">
     <script src="js/conn.js"></script>
@@ -190,7 +191,7 @@
                     
                 var jsonData = JSON.parse(trig);
                 
-                    var JsonDataLength = parseInt(jsonData[1]["id"]) + parseInt(Object.keys(jsonData).length);
+                    var JsonDataLength = parseFloat(jsonData[1]["id"]) + parseFloat(Object.keys(jsonData).length);
                     for(var ts=1;ts<=Object.keys(jsonData).length;ts++){
 
                         if(jsonData[ts]["stat"] != "2"){
@@ -366,12 +367,12 @@
                 _("qty"+on).value = _("orderQty-div"+on).innerText;
             }
             }else{
-                    _("orderQty-div"+on).innerText = parseInt(_("orderQty-div"+on).innerText) + parseInt(oqty);
+                    _("orderQty-div"+on).innerText = parseFloat(_("orderQty-div"+on).innerText) + parseFloat(oqty);
                     if(_("qty"+on)){
                     _("qty"+on).value = _("orderQty-div"+on).innerText;
                     }
             }
-            _("subOrder-total"+on).innerText = numRM(parseInt(_("order-unitPrice"+on).innerHTML.split(" ")[1]) * parseInt(_("orderQty-div"+on).innerText));
+            _("subOrder-total"+on).innerText = numRM(parseFloat(_("order-unitPrice"+on).innerHTML.split(" ")[1]) * parseFloat(_("orderQty-div"+on).innerText));
             _("orderContainerTotal"+on).innerHTML = _("subOrder-total"+on).innerText;
 
             if(oOpt != "false"){
@@ -411,7 +412,7 @@
 
                     _("qtyOpts"+on+"-"+oOpt).value = _("optSel"+on +"-"+ oOpt).innerText;
                 }else{
-                    _("optSel"+on +"-"+ oOpt).innerText = parseInt(_("optSel"+on +"-"+ oOpt).innerText) + parseInt(oqty);
+                    _("optSel"+on +"-"+ oOpt).innerText = parseFloat(_("optSel"+on +"-"+ oOpt).innerText) + parseFloat(oqty);
                     _("qtyOpts"+on+"-"+oOpt).value = _("optSel"+on +"-"+ oOpt).innerText;
                 }
                 _("optSelTotal"+on +"-"+ oOpt).innerText = numRM(_("optSelPrice"+on +"-"+ oOpt).innerText.split(" ")[1] * _("optSel"+on +"-"+ oOpt).innerText);
@@ -429,13 +430,13 @@
             if(_("order"+mn)){
                 if(mOpt != "false"){
                     if(_("optSel"+mn +"-"+ mOpt)){
-                        _("optSel"+mn +"-"+ mOpt).innerText = parseInt(_("optSel"+mn +"-"+ mOpt).innerText) - parseInt(mqty);
-                        _("orderQty-div"+mn).innerText = parseInt(_("orderQty-div"+mn).innerText) - parseInt(mqty);
+                        _("optSel"+mn +"-"+ mOpt).innerText = parseFloat(_("optSel"+mn +"-"+ mOpt).innerText) - parseFloat(mqty);
+                        _("orderQty-div"+mn).innerText = parseFloat(_("orderQty-div"+mn).innerText) - parseFloat(mqty);
                         
                         _("qtyOpts"+mn+"-"+mOpt).value = _("optSel"+mn +"-"+ mOpt).innerText;
 
                         _("optSelTotal"+mn +"-"+ mOpt).innerText = numRM(_("optSelPrice"+mn +"-"+ mOpt).innerText.split(" ")[1] * _("optSel"+mn +"-"+ mOpt).innerText);
-                        _("subOrder-total"+mn).innerText = numRM(parseInt(_("order-unitPrice"+mn).innerHTML.split(" ")[1]) * parseInt(_("orderQty-div"+mn).innerText));
+                        _("subOrder-total"+mn).innerText = numRM(parseFloat(_("order-unitPrice"+mn).innerHTML.split(" ")[1]) * parseFloat(_("orderQty-div"+mn).innerText));
 
                         var overAllOptTotal = 0;
                         for(var qe=0;qe<_("optionsContainer"+mn).childElementCount;qe++){
@@ -452,8 +453,8 @@
                         _("order"+mn).parentNode.removeChild(_("order"+mn));
                     }
                 }else{
-                    _("orderQty-div"+mn).innerText = parseInt(_("orderQty-div"+mn).innerText) - parseInt(mqty);
-                    _("subOrder-total"+mn).innerText = numRM(parseInt(_("order-unitPrice"+mn).innerHTML.split(" ")[1]) * parseInt(_("orderQty-div"+mn).innerText));
+                    _("orderQty-div"+mn).innerText = parseFloat(_("orderQty-div"+mn).innerText) - parseFloat(mqty);
+                    _("subOrder-total"+mn).innerText = numRM(parseFloat(_("order-unitPrice"+mn).innerHTML.split(" ")[1]) * parseFloat(_("orderQty-div"+mn).innerText));
                     _("orderContainerTotal"+mn).innerHTML = _("subOrder-total"+mn).innerText;
 
                     if(_("qty"+mn)){
